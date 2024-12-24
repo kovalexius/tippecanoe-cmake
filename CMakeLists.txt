@@ -1,0 +1,37 @@
+project(tippecanoe)
+
+add_executable(tippecanoe
+    geojson.cpp
+    jsonpull/jsonpull.c
+    tile.cpp
+    pool.cpp
+    mbtiles.cpp
+    geometry.cpp
+    projection.cpp
+    memfile.cpp
+    mvt.cpp
+    serial.cpp
+    main.cpp
+    platform.cpp
+    text.cpp
+    dirtiles.cpp
+    pmtiles_file.cpp
+    plugin.cpp
+    read_json.cpp
+    write_json.cpp
+    geobuf.cpp
+    flatgeobuf.cpp
+    evaluator.cpp
+    geocsv.cpp
+    csv.cpp
+    geojson-loop.cpp
+    json_logger.cpp
+    visvalingam.cpp
+    compression.cpp
+    clip.cpp
+    sort.cpp
+    attribute.cpp
+    thread.cpp
+    shared_borders.cpp
+    clipper2/src/clipper.engine.cpp
+)
