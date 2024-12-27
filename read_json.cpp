@@ -61,9 +61,11 @@ void parse_coordinates(int t, json_object *j, drawvec &out, int op, const char *
 	}
 
 	int within = geometry_within[t];
-	if (within >= 0) {
+	if (within >= 0)
+	{
 		size_t i;
-		for (i = 0; i < j->value.array.length; i++) {
+		for (i = 0; i < j->value.array.length; i++)
+		{
 			if (within == GEOM_POINT) {
 				if (i == 0 || mb_geometry[t] == VT_POINT) {
 					op = VT_MOVETO;
@@ -74,8 +76,11 @@ void parse_coordinates(int t, json_object *j, drawvec &out, int op, const char *
 
 			parse_coordinates(within, j->value.array.array[i], out, op, fname, line, feature);
 		}
-	} else {
-		if (j->value.array.length >= 2 && j->value.array.array[0]->type == JSON_NUMBER && j->value.array.array[1]->type == JSON_NUMBER) {
+	}
+	else
+	{
+		if (j->value.array.length >= 2 && j->value.array.array[0]->type == JSON_NUMBER && j->value.array.array[1]->type == JSON_NUMBER)
+		{
 			long long x, y;
 			double lon = j->value.array.array[0]->value.number.number;
 			double lat = j->value.array.array[1]->value.number.number;
@@ -94,7 +99,9 @@ void parse_coordinates(int t, json_object *j, drawvec &out, int op, const char *
 			}
 
 			out.push_back(draw(op, x, y));
-		} else {
+		}
+		else
+		{
 			fprintf(stderr, "%s:%d: malformed point: ", fname, line);
 			json_context(j);
 			fprintf(stderr, "%s:%d: malformed point: ", fname, line);

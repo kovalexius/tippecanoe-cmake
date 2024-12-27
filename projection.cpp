@@ -101,7 +101,8 @@ void epsg3857totile(double ix, double iy, int zoom, long long *x, long long *y) 
 	std::cout << __FUNCTION__ << " ix: " << ix << ", iy: " << iy << ", zoom: " << zoom << ", x: " << *x << ", y: " << *y << std::endl;
 }
 
-void tiletoepsg3857(long long ix, long long iy, int zoom, double *ox, double *oy) {
+void tiletoepsg3857(long long ix, long long iy, int zoom, double *ox, double *oy)
+{
 	if (zoom != 0) {
 		ix <<= (32 - zoom);
 		iy <<= (32 - zoom);
@@ -109,11 +110,14 @@ void tiletoepsg3857(long long ix, long long iy, int zoom, double *ox, double *oy
 
 	*ox = (ix - (1LL << 31)) * M_PI * 6378137.0 / (1LL << 31);
 	*oy = ((1LL << 32) - 1 - iy - (1LL << 31)) * M_PI * 6378137.0 / (1LL << 31);
+	
+	std::cout << __FUNCTION__ << " ix: " << ix << ", iy: " << ", zoom: " << zoom << ", ox: " << *ox << ", oy: " << *oy << std::endl;
 }
 
 // https://en.wikipedia.org/wiki/Hilbert_curve
 
-void hilbert_rot(unsigned long long n, unsigned *x, unsigned *y, unsigned long long rx, unsigned long long ry) {
+void hilbert_rot(unsigned long long n, unsigned *x, unsigned *y, unsigned long long rx, unsigned long long ry)
+{
 	if (ry == 0) {
 		if (rx == 1) {
 			*x = n - 1 - *x;
@@ -124,6 +128,8 @@ void hilbert_rot(unsigned long long n, unsigned *x, unsigned *y, unsigned long l
 		*x = *y;
 		*y = t;
 	}
+	
+	std::cout << __FUNCTION__ << " n: " << n << ", x: " << *x << ", y: " << *y << ", rx: " << rx << ", ry: " << ry << std::endl;
 }
 
 unsigned long long hilbert_xy2d(unsigned long long n, unsigned x, unsigned y) {
@@ -164,7 +170,8 @@ void decode_hilbert(unsigned long long index, unsigned *wx, unsigned *wy) {
 	hilbert_d2xy(1LL << 32, index, wx, wy);
 }
 
-unsigned long long encode_quadkey(unsigned int wx, unsigned int wy) {
+unsigned long long encode_quadkey(unsigned int wx, unsigned int wy)
+{
 	unsigned long long out = 0;
 
 	int i;
@@ -176,13 +183,16 @@ unsigned long long encode_quadkey(unsigned int wx, unsigned int wy) {
 		out |= v;
 	}
 
+	std::cout << __FUNCTION__ << " wx: " << wx << " wy: " << wy << std::endl;
+
 	return out;
 }
 
 static std::atomic<unsigned char> decodex[256];
 static std::atomic<unsigned char> decodey[256];
 
-void decode_quadkey(unsigned long long index, unsigned *wx, unsigned *wy) {
+void decode_quadkey(unsigned long long index, unsigned *wx, unsigned *wy)
+{
 	static std::atomic<int> initialized(0);
 	if (!initialized) {
 		for (size_t ix = 0; ix < 256; ix++) {
@@ -206,6 +216,8 @@ void decode_quadkey(unsigned long long index, unsigned *wx, unsigned *wy) {
 		*wx |= ((unsigned) decodex[(index >> (8 * i)) & 0xFF]) << (4 * i);
 		*wy |= ((unsigned) decodey[(index >> (8 * i)) & 0xFF]) << (4 * i);
 	}
+	
+	std::cout << __FUNCTION__ << " index: " << index << ", wx: " << *wx << ", wy: " << *wy << std::endl;
 }
 
 void set_projection_or_exit(const char *optarg) {
