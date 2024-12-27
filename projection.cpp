@@ -7,6 +7,8 @@
 #include "projection.hpp"
 #include "errors.hpp"
 
+#include <iostream>
+
 unsigned long long (*encode_index)(unsigned int wx, unsigned int wy) = NULL;
 void (*decode_index)(unsigned long long index, unsigned *wx, unsigned *wy) = NULL;
 
@@ -62,6 +64,8 @@ void lonlat2tile(double lon, double lat, int zoom, long long *x, long long *y) {
 
 	*x = llx;
 	*y = lly;
+	
+	std::cout << __FUNCTION__ << " lon: " << lon << ", lat: " << lat << ", zoom: " << zoom << ", x: " << *x << ", y: " << *y << std::endl;
 }
 
 // http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
@@ -69,6 +73,8 @@ void tile2lonlat(long long x, long long y, int zoom, double *lon, double *lat) {
 	unsigned long long n = 1LL << zoom;
 	*lon = 360.0 * x / n - 180.0;
 	*lat = atan(sinh(M_PI * (1 - 2.0 * y / n))) * 180.0 / M_PI;
+	
+	std::cout << __FUNCTION__ << " x: " << x << ", y: " << y << ", zoom: " << zoom << ", lon: " << *lon << ", lat: " << *lat << std::endl;
 }
 
 void epsg3857totile(double ix, double iy, int zoom, long long *x, long long *y) {
@@ -91,6 +97,8 @@ void epsg3857totile(double ix, double iy, int zoom, long long *x, long long *y) 
 		*x = std::round((double) *x / (1LL << (32 - zoom)));
 		*y = std::round((double) *y / (1LL << (32 - zoom)));
 	}
+	
+	std::cout << __FUNCTION__ << " ix: " << ix << ", iy: " << iy << ", zoom: " << zoom << ", x: " << *x << ", y: " << *y << std::endl;
 }
 
 void tiletoepsg3857(long long ix, long long iy, int zoom, double *ox, double *oy) {
