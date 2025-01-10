@@ -2788,6 +2788,13 @@ std::pair<int, metadata> read_input(std::vector<source> &sources, char *fname, i
 
 	midlat = (maxlat + minlat) / 2;
 	midlon = (maxlon + minlon) / 2;
+	std::cout << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << std::endl <<
+				 '\t' << " maxlat: " << maxlat << 
+				 '\t' << " minlat: " << minlat <<
+				 '\t' << " midlat: " << midlat << std::endl <<
+				 '\t' << " maxlon: " << maxlon <<
+				 '\t' << " minlon: " << minlon <<
+				 '\t' << " midlon: " << midlon << std::endl;
 
 	tile2lonlat(file_bbox[0], file_bbox[1], 32, &minlon, &maxlat);
 	tile2lonlat(file_bbox[2], file_bbox[3], 32, &maxlon, &minlat);

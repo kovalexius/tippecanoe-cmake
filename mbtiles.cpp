@@ -13,6 +13,7 @@
 #include <string>
 #include <set>
 #include <map>
+#include <iostream>
 #include <sys/stat.h>
 #include "mvt.hpp"
 #include "mbtiles.hpp"
@@ -495,6 +496,7 @@ void mbtiles_write_metadata(sqlite3 *db, const metadata &m, bool forcetable) {
 	}
 	sqlite3_free(sql);
 
+	std::cout << __FUNCTION__ << " m.minzoom: " << m.minzoom << " m.maxzoom: " << m.maxzoom << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('minzoom', %d);", m.minzoom);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set minzoom: %s\n", err);
@@ -513,6 +515,7 @@ void mbtiles_write_metadata(sqlite3 *db, const metadata &m, bool forcetable) {
 	}
 	sqlite3_free(sql);
 
+	std::cout << __FUNCTION__ << " center: " << " (m.center_lon: " << m.center_lon << "), (m.center_lat: " << m.center_lat << "), (m.center_z: " << m.center_z << ")" << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('center', '%f,%f,%d');", m.center_lon, m.center_lat, m.center_z);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set center: %s\n", err);
@@ -522,6 +525,10 @@ void mbtiles_write_metadata(sqlite3 *db, const metadata &m, bool forcetable) {
 	}
 	sqlite3_free(sql);
 
+	std::cout << __FUNCTION__ << " bounds: " << " (m.minlon: " << m.minlon << "), " <<
+				 "(m.minlat: " << m.minlat << "), " <<
+				 "(m.maxlon: " << m.maxlon << "), " <<
+				 "(m.maxlat: " << m.maxlat << ")" << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('bounds', '%f,%f,%f,%f');", m.minlon, m.minlat, m.maxlon, m.maxlat);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set bounds: %s\n", err);
@@ -531,6 +538,10 @@ void mbtiles_write_metadata(sqlite3 *db, const metadata &m, bool forcetable) {
 	}
 	sqlite3_free(sql);
 
+	std::cout << __FUNCTION__ << " antimeridian_adjusted_bounds: " << " (m.minlon2: " << m.minlon2 << "), " <<
+				 "(m.minlat2: " << m.minlat2 << "), " <<
+				 "(m.maxlon2: " << m.maxlon2 << "), " <<
+				 "(m.maxlat2: " << m.maxlat2 << "), " << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('antimeridian_adjusted_bounds', '%f,%f,%f,%f');", m.minlon2, m.minlat2, m.maxlon2, m.maxlat2);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set bounds: %s\n", err);

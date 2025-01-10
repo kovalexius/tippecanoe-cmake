@@ -355,6 +355,7 @@ sqlite3 *pmtilesmeta2tmp(const char *fname, const char *pmtiles_map) {
 	std::string header_s{pmtiles_map, 127};
 	auto header = pmtiles::deserialize_header(header_s);
 
+	std::cout << __FUNCTION__ << " minzoom: " << header.min_zoom << " maxzoom: " << header.max_zoom << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('minzoom', %d);", header.min_zoom);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set minzoom: %s\n", err);
@@ -367,18 +368,25 @@ sqlite3 *pmtilesmeta2tmp(const char *fname, const char *pmtiles_map) {
 	}
 	sqlite3_free(sql);
 
+	std::cout << __FUNCTION__ << " header.center_lon_e7: " << header.center_lon_e7 << ", header.center_lat_e7: " << header.center_lat_e7 << std::endl;
 	double center_lon = double(header.center_lon_e7) / 10000000.0;
 	double center_lat = double(header.center_lat_e7) / 10000000.0;
+	std::cout << __FUNCTION__ << " center: " << center_lon << ", " << center_lat << ", " << header.center_zoom << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('center', '%f,%f,%d');", center_lon, center_lat, header.center_zoom);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set center: %s\n", err);
 	}
 	sqlite3_free(sql);
 
+	std::cout << __FUNCTION__ << " header.min_lon_e7: " << header.min_lon_e7 << 
+				 ", header.min_lat_e7: " << header.min_lat_e7 <<
+				 ", header.max_lon_e7: " << header.max_lon_e7 <<
+				 ", header.max_lat_e7: " << header.max_lat_e7 << std::endl;
 	double minlon = double(header.min_lon_e7) / 10000000.0;
 	double minlat = double(header.min_lat_e7) / 10000000.0;
 	double maxlon = double(header.max_lon_e7) / 10000000.0;
 	double maxlat = double(header.max_lat_e7) / 10000000.0;
+	std::cout << __FUNCTION__ << " bounds: " << minlon << ", " << minlat << ", " << maxlon << ", " << maxlat << std::endl;
 	sql = sqlite3_mprintf("INSERT INTO metadata (name, value) VALUES ('bounds', '%f,%f,%f,%f');", minlon, minlat, maxlon, maxlat);
 	if (sqlite3_exec(db, sql, NULL, NULL, &err) != SQLITE_OK) {
 		fprintf(stderr, "set bounds: %s\n", err);
